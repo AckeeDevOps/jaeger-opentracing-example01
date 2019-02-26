@@ -22,4 +22,6 @@ This is just basic example for demonstration purposes:
 
 5. send a few HTTP requests to `http://localhost:3001/local/service1`
 
-6. open `http://localhost:8080` and check recorded traces
+6. send a few HTTP requests to `http://localhost:3001/local/service1-parallel`
+
+7. open `http://localhost:8080` and check recorded traces, you should see some differences in Start Times as the `/local/service1-parallel` endpoint runs HTTPs requests in parallel.

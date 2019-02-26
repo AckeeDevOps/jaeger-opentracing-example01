@@ -28,7 +28,7 @@ app.get('/local/service1', function(req, res) {
     });
 });
 
-app.get('/local/service1-paralel', async function(req, res) {
+app.get('/local/service1-parallel', async function(req, res) {
 
   const uri1 = 'http://service2:3000/remote/service2';
   const uri2 = 'http://service3:3000/remote/service3';
