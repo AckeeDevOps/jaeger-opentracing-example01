@@ -1,0 +1,90 @@
+# Please configure followin env variables:
+#   ES_SERVER_URLS:
+#   ES_PASSWORD
+#   ES_USERNAME
+
+version: '3.7'
+services:
+
+  agent:
+    image: jaegertracing/jaeger-agent:1.10
+    command: ["--reporter.tchannel.host-port=collector:14267"]
+  
+  collector:
+    image: jaegertracing/jaeger-collector:1.10
+    environment:
+      SPAN_STORAGE_TYPE: elasticsearch
+      ES_SERVER_URLS: "${ES_SERVER_URLS}"
+      ES_PASSWORD: "${ES_PASSWORD}"
+      ES_USERNAME: "${ES_USERNAME}"
+
+  # https://github.com/jaegertracing/jaeger-kubernetes/issues/112
+  query:
+    image: jaegertracing/jaeger-query:1.10
+    environment:
+      SPAN_STORAGE_TYPE: elasticsearch
+      ES_SERVER_URLS: "${ES_SERVER_URLS}"
+      ES_PASSWORD: "${ES_PASSWORD}"
+      ES_USERNAME: "${ES_USERNAME}"
+    ports:
+      - 8080:16686
+
+  service1:
+    build:
+      context: ./service
+    environment:
+      JAEGER_SERVICE_NAME: "service1"
+      JAEGER_AGENT_HOST: "agent"
+      JAEGER_AGENT_PORT: "6832"
+      JAEGER_REPORTER_LOG_SPANS: "true"
+      JAEGER_SAMPLER_TYPE: "probabilistic"
+      JAEGER_SAMPLER_PARAM: "1.0"
+      APP_PORT: 3000
+      APP_PROJECT_NAME: project001
+    ports:
+      - 3001:3000
+
+  service2:
+    build:
+      context: ./service
+    environment:
+      JAEGER_SERVICE_NAME: "service2"
+      JAEGER_AGENT_HOST: "agent"
+      JAEGER_AGENT_PORT: "6832"
+      JAEGER_REPORTER_LOG_SPANS: "true"
+      JAEGER_SAMPLER_TYPE: "probabilistic"
+      JAEGER_SAMPLER_PARAM: "1.0"
+      APP_PORT: 3000
+      APP_PROJECT_NAME: project001
+    ports:
+      - 3002:3000
+
+  service3:
+    build:
+      context: ./service
+    environment:
+      JAEGER_SERVICE_NAME: "service3"
+      JAEGER_AGENT_HOST: "agent"
+      JAEGER_AGENT_PORT: "6832"
+      JAEGER_REPORTER_LOG_SPANS: "true"
+      JAEGER_SAMPLER_TYPE: "probabilistic"
+      JAEGER_SAMPLER_PARAM: "1.0"
+      APP_PORT: 3000
+      APP_PROJECT_NAME: project001
+    ports:
+      - 3003:3000
+
+  service4:
+    build:
+      context: ./service
+    environment:
+      JAEGER_SERVICE_NAME: "service4"
+      JAEGER_AGENT_HOST: "agent"
+      JAEGER_AGENT_PORT: "6832"
+      JAEGER_REPORTER_LOG_SPANS: "true"
+      JAEGER_SAMPLER_TYPE: "probabilistic"
+      JAEGER_SAMPLER_PARAM: "1.0"
+      APP_PORT: 3000
+      APP_PROJECT_NAME: project001
+    ports:
+      - 3004:3000
