@@ -28,6 +28,21 @@ app.get('/local/service1', function(req, res) {
     });
 });
 
+app.get('/local/service1-paralel', async function(req, res) {
+
+  const uri1 = 'http://service2:3000/remote/service2';
+  const uri2 = 'http://service3:3000/remote/service3';
+
+  try {
+    const call1 = reqh(uri1, req.span);
+    const call2 = reqh(uri2, req.span);
+    const [remoteres1, remoteRes2] = await Promise.all([call1, call2]);
+    res.send(`first response: ${remoteres1}, second reponse: ${remoteRes2}`);
+  } catch(e) {
+    res.status(500).send("It's broken");
+  }
+});
+
 app.get('/remote/service2', function(req, res) {
   res.send(process.env.JAEGER_SERVICE_NAME);
 });
